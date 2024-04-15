@@ -52,7 +52,7 @@
       <template v-slot:activator="{ props }">
         <v-btn
           v-bind="props"
-          icon="mdi-sort"
+          :icon="visibleIcon"
           density="compact"
           variant="tonal"
           class="sort-btn"
@@ -109,14 +109,23 @@
   const secondList = inject('secondList');
   const lastList = inject('lastList');
 
+  const emit = defineEmits(['update:selectedSort'])
+
   const props = defineProps({
     card: {},
     options: {},
+    selectedSort: {},
   });
 
   const borderColor = computed(() => {
     return props.options.id === 1 ? 'blue' : props.options.id === 2 ? 'yellow' : 'pink';
   });
+
+  const visibleIcon = computed(() => {
+    return props.selectedSort.value === 'default' ?
+    'mdi-sort' : props.selectedSort.value === 'rateUp' ?
+    'mdi-sort-descending' : 'mdi-sort-ascending'
+  })
 
   let cards = ref([]);
 
@@ -164,8 +173,10 @@
   }
 
   function sortList() {
-    getLocalCards();
-    cards = cards.value.sort((a, b) => b.rating.rate - a.rating.rate);
+    const newValue = props.selectedSort.value === 'default' ?
+    { text: 'По возрастанию рейтинга', value: 'rateUp' } : props.selectedSort.value === 'rateUp' ?
+    { text: 'По убыванию рейтинга', value: 'rateDown' } : { text: 'По умолчанию', value: 'default' }
+    emit('update:selectedSort', newValue)
   }
 </script>
 

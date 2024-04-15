@@ -4,14 +4,6 @@
     @drop="onDrop($event, options.id)"
     @dragover.prevent
     @dragenter.prevent>
-    <div class="title">
-      <h2>
-        {{ options.title }}
-      </h2>
-      <div class="counter">
-        <span>{{ cards.length }}</span>
-      </div>
-    </div>
     <search>
       <v-menu>
       <template v-slot:activator="{ props }">
@@ -34,6 +26,14 @@
       </v-list>
     </v-menu>
     </search>
+    <div class="title">
+      <h2>
+        {{ options.title }}
+      </h2>
+      <div class="counter">
+        <span>{{ cards.length }}</span>
+      </div>
+    </div>
     <v-btn
       icon="mdi-plus"
       variant="tonal"
@@ -47,6 +47,7 @@
       :key="index"
       :card="card"
       :options="props.options"
+      v-model:selectedSort="selectedSort"
       @delete-card="deleteCard(card.id)"
       @dragstart="onDragStart($event, card)" />
 
